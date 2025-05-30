@@ -14,6 +14,20 @@ const configSchema = z.object({
         username: z.string().default("root"),
         password: z.string().default(""),
         database: z.string().default("auth_service")
+    }),
+    jwt: z.object({
+        accessSecret: z.string(),
+        refreshSecret: z.string(),
+        accessExpiresIn: z.string().default("15m"),
+        refreshExpiresIn: z.string().default("7d")
+    }),
+    passwordReset: z.object({
+        secret: z.string(),
+        expiresIn: z.string().default("1h")
+    }),
+    rateLimit: z.object({
+        windowMs: z.coerce.number().default(15 * 60 * 1000), // 15 minutes
+        maxRequests: z.coerce.number().default(100)
     })
 })
 
@@ -26,6 +40,20 @@ const rawConfig = {
         username: process.env.DB_USERNAME,
         password: process.env.DB_PASSWORD,
         database: process.env.DB_DATABASE
+    },
+    jwt: {
+        accessSecret: process.env.JWT_ACCESS_SECRET,
+        refreshSecret: process.env.JWT_REFRESH_SECRET,
+        accessExpiresIn: process.env.JWT_ACCESS_EXPIRES_IN,
+        refreshExpiresIn: process.env.JWT_REFRESH_EXPIRES_IN
+    },
+    passwordReset: {
+        secret: process.env.PASSWORD_RESET_SECRET,
+        expiresIn: process.env.PASSWORD_RESET_EXPIRES_IN
+    },
+    rateLimit: {
+        windowMs: process.env.RATE_LIMIT_WINDOW_MS,
+        maxRequests: process.env.RATE_LIMIT_MAX_REQUESTS
     }
 }
 
